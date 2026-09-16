@@ -11,6 +11,7 @@ const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 const path = require('path');
+const { Pool } = require('pg');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,12 +20,23 @@ const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const COURSES_FILE = path.join(DATA_DIR, 'courses.json');
 const RESULTS_FILE = path.join(DATA_DIR, 'results.json');
 
+const pool = process.env.DATABASE_URL
+  ? new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false }
+    })
+  : null;
+
+let memUsers = [];
+let memCourses = [];
+let memResults = [];
+
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: '2mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ---------- Helpers de archivos ----------
+// ---------- Persistencia (Postgres si hay DATABASE_URL, si no JSON) ----------
 function ensureDataDir() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 }
@@ -45,34 +57,87 @@ function writeJSON(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2));
 }
 
+async function kvGet(key, fallback) {
+  const r = await pool.query('SELECT value FROM kv WHERE key = $1', [key]);
+  if (!r.rows.length) return fallback;
+  return r.rows[0].value;
+}
+
+async function kvSet(key, value) {
+  await pool.query(
+    `INSERT INTO kv(key, value) VALUES($1, $2::jsonb)
+     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+    [key, JSON.stringify(value)]
+  );
+}
+
+function persist(key, value) {
+  if (pool) {
+    kvSet(key, value).catch((err) => console.error('Error guardando', key, err.message));
+  } else if (key === 'users') writeJSON(USERS_FILE, value);
+  else if (key === 'courses') writeJSON(COURSES_FILE, value);
+  else if (key === 'results') writeJSON(RESULTS_FILE, value);
+}
+
 function getUsers() {
-  return readJSON(USERS_FILE, []);
+  return memUsers;
 }
 
 function saveUsers(users) {
-  writeJSON(USERS_FILE, users);
+  memUsers = users;
+  persist('users', users);
 }
 
 function getCourses() {
-  const courses = readJSON(COURSES_FILE, null);
-  if (courses === null || (Array.isArray(courses) && courses.length === 0 && !fs.existsSync(COURSES_FILE))) {
-    const defaults = getDefaultCourses();
-    writeJSON(COURSES_FILE, defaults);
-    return defaults;
-  }
-  return courses;
+  return memCourses;
 }
 
 function saveCourses(courses) {
-  writeJSON(COURSES_FILE, courses);
+  memCourses = courses;
+  persist('courses', courses);
 }
 
 function getResults() {
-  return readJSON(RESULTS_FILE, []);
+  return memResults;
 }
 
 function saveResults(results) {
-  writeJSON(RESULTS_FILE, results);
+  memResults = results;
+  persist('results', results);
+}
+
+async function initStore() {
+  if (pool) {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS kv (
+        key TEXT PRIMARY KEY,
+        value JSONB NOT NULL
+      )
+    `);
+    memUsers = await kvGet('users', []);
+    memCourses = await kvGet('courses', []);
+    memResults = await kvGet('results', []);
+    if (!Array.isArray(memCourses) || memCourses.length === 0) {
+      memCourses = getDefaultCourses();
+      await kvSet('courses', memCourses);
+    }
+    if (!Array.isArray(memUsers)) memUsers = [];
+    if (!Array.isArray(memResults)) memResults = [];
+    console.log('  Almacenamiento: PostgreSQL');
+    return;
+  }
+
+  ensureDataDir();
+  memUsers = readJSON(USERS_FILE, []);
+  const courses = readJSON(COURSES_FILE, []);
+  if (!courses.length) {
+    memCourses = getDefaultCourses();
+    writeJSON(COURSES_FILE, memCourses);
+  } else {
+    memCourses = courses;
+  }
+  memResults = readJSON(RESULTS_FILE, []);
+  console.log('  Almacenamiento: archivos JSON locales');
 }
 
 function findUserByEmail(email) {
@@ -749,15 +814,19 @@ app.get('*', (req, res) => {
 });
 
 // ---------- Start ----------
-ensureDataDir();
-getCourses();
-
-app.listen(PORT, () => {
-  console.log('');
-  console.log('  🛡️  Cewyx Server');
-  console.log('  ----------------');
-  console.log(`  Abre en el navegador: http://localhost:${PORT}`);
-  console.log('');
-  console.log('  Ctrl+C para detener');
-  console.log('');
-});
+initStore()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log('');
+      console.log('  🛡️  Cewyx Server');
+      console.log('  ----------------');
+      console.log(`  Abre en el navegador: http://localhost:${PORT}`);
+      console.log('');
+      console.log('  Ctrl+C para detener');
+      console.log('');
+    });
+  })
+  .catch((err) => {
+    console.error('No se pudo iniciar el almacenamiento:', err);
+    process.exit(1);
+  });
