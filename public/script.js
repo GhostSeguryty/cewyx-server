@@ -579,19 +579,18 @@
   function renderLabs() {
     return `
       <h3 class="section-title">Laboratorios educativos</h3>
-      <p style="color:var(--text-secondary);margin-bottom:1.5rem">Ejercicios interactivos con datos ficticios.</p>
-      <div class="lab-card" id="lab-phishing">
-        <h3>🎣 Identificar phishing</h3>
+      <p style="color:var(--text-secondary);margin-bottom:1.5rem">12 ejercicios interactivos con datos 100% ficticios. Solo para aprendizaje.</p>
+
+      <div class="lab-card">
+        <h3>1. 🎣 Identificar phishing</h3>
         <p>Observa el correo ficticio y decide si es legítimo o phishing.</p>
         <div class="lab-exercise">
           <div class="fake-email">
             <strong>De:</strong> seguridad@banc0-seguro.com<br>
             <strong>Asunto:</strong> URGENTE: Su cuenta será suspendida en 12 horas<br><br>
-            Estimado cliente,<br><br>
-            Hemos detectado actividad sospechosa. Debe verificar su identidad haciendo clic e introduciendo usuario y contraseña:<br><br>
-            👉 http://banc0-seguro.com-verificar.tk/login<br><br>
-            Si no lo hace en 12 horas, su cuenta será bloqueada.<br><br>
-            Atentamente, Departamento de Seguridad
+            Estimado cliente, hemos detectado actividad sospechosa. Verifique su identidad aquí:<br>
+            👉 http://banc0-seguro.com-verificar.tk/login<br>
+            Si no lo hace en 12 horas, su cuenta será bloqueada.
           </div>
           <div class="lab-options">
             <button class="btn btn-danger btn-sm" data-lab="phishing" data-answer="phish">Es phishing</button>
@@ -600,8 +599,9 @@
           <div id="lab-phishing-feedback"></div>
         </div>
       </div>
-      <div class="lab-card" id="lab-urls">
-        <h3>🔗 Analizar URLs ficticias</h3>
+
+      <div class="lab-card">
+        <h3>2. 🔗 Analizar URLs ficticias</h3>
         <p>¿Cuál parece más sospechosa?</p>
         <div class="lab-exercise">
           <div class="fake-url">A) https://www.tienda-oficial.com/cuenta</div>
@@ -615,8 +615,9 @@
           <div id="lab-urls-feedback"></div>
         </div>
       </div>
-      <div class="lab-card" id="lab-passwords">
-        <h3>🔑 Detectar contraseñas débiles</h3>
+
+      <div class="lab-card">
+        <h3>3. 🔑 Detectar contraseñas débiles</h3>
         <p>Selecciona la más débil:</p>
         <div class="lab-exercise">
           <div class="fake-password">1) C0ntr@señaSegura2024!</div>
@@ -632,8 +633,9 @@
           <div id="lab-passwords-feedback"></div>
         </div>
       </div>
-      <div class="lab-card" id="lab-social">
-        <h3>🎭 Reconocer ingeniería social</h3>
+
+      <div class="lab-card">
+        <h3>4. 🎭 Reconocer ingeniería social</h3>
         <p>Un supuesto técnico llama: "Soy de TI. Necesitamos su contraseña para no perder sus archivos. El sistema se reinicia en 10 minutos."</p>
         <div class="lab-exercise">
           <div class="lab-options">
@@ -644,8 +646,9 @@
           <div id="lab-social-feedback"></div>
         </div>
       </div>
-      <div class="lab-card" id="lab-behavior">
-        <h3>⚠️ Identificar comportamientos inseguros</h3>
+
+      <div class="lab-card">
+        <h3>5. ⚠️ Identificar comportamientos inseguros</h3>
         <p>¿Cuál es más inseguro?</p>
         <div class="lab-exercise">
           <div class="fake-password">A) Usar gestor de contraseñas y 2FA</div>
@@ -659,6 +662,97 @@
             <button class="btn btn-secondary btn-sm" data-lab="behavior" data-answer="D">D</button>
           </div>
           <div id="lab-behavior-feedback"></div>
+        </div>
+      </div>
+
+      <div class="lab-card">
+        <h3>6. 📱 Permisos de una app ficticia</h3>
+        <p>Una app llamada "Linterna Rápida" pide: cámara, micrófono, contactos, ubicación y SMS. ¿Qué haces?</p>
+        <div class="lab-exercise">
+          <div class="lab-options">
+            <button class="btn btn-secondary btn-sm" data-lab="permisos" data-answer="all">Dar todos los permisos</button>
+            <button class="btn btn-secondary btn-sm" data-lab="permisos" data-answer="needed">Dar solo lo necesario o no instalarla</button>
+            <button class="btn btn-secondary btn-sm" data-lab="permisos" data-answer="ignore">Ignorar y usarla igual</button>
+          </div>
+          <div id="lab-permisos-feedback"></div>
+        </div>
+      </div>
+
+      <div class="lab-card">
+        <h3>7. 📶 Wi-Fi pública ficticia</h3>
+        <p>Estás en un café. Ves dos redes: "CafeNorte-Gratis" y "CafeNorte_Free_5G". No sabes cuál es la oficial. ¿Qué es más seguro?</p>
+        <div class="lab-exercise">
+          <div class="lab-options">
+            <button class="btn btn-secondary btn-sm" data-lab="wifi" data-answer="any">Conectarte a cualquiera</button>
+            <button class="btn btn-secondary btn-sm" data-lab="wifi" data-answer="ask">Preguntar al personal y evitar datos sensibles</button>
+            <button class="btn btn-secondary btn-sm" data-lab="wifi" data-answer="bank">Entrar al banco en la que tenga mejor señal</button>
+          </div>
+          <div id="lab-wifi-feedback"></div>
+        </div>
+      </div>
+
+      <div class="lab-card">
+        <h3>8. 📎 Adjunto sospechoso</h3>
+        <p>Correo ficticio: "Factura urgente.zip.exe" de un remitente desconocido. ¿Qué haces?</p>
+        <div class="lab-exercise">
+          <div class="lab-options">
+            <button class="btn btn-secondary btn-sm" data-lab="adjunto" data-answer="open">Abrirlo para ver de qué se trata</button>
+            <button class="btn btn-secondary btn-sm" data-lab="adjunto" data-answer="delete">No abrirlo y reportarlo / eliminarlo</button>
+            <button class="btn btn-secondary btn-sm" data-lab="adjunto" data-answer="forward">Reenviarlo a compañeros para preguntar</button>
+          </div>
+          <div id="lab-adjunto-feedback"></div>
+        </div>
+      </div>
+
+      <div class="lab-card">
+        <h3>9. 🔒 Código 2FA ficticio</h3>
+        <p>Alguien en un chat dice: "Soy soporte. Envíame el código de 6 dígitos que te acaba de llegar para validar tu cuenta."</p>
+        <div class="lab-exercise">
+          <div class="lab-options">
+            <button class="btn btn-secondary btn-sm" data-lab="otp" data-answer="send">Enviar el código</button>
+            <button class="btn btn-secondary btn-sm" data-lab="otp" data-answer="no">No enviarlo nunca</button>
+            <button class="btn btn-secondary btn-sm" data-lab="otp" data-answer="photo">Mandar captura del mensaje</button>
+          </div>
+          <div id="lab-otp-feedback"></div>
+        </div>
+      </div>
+
+      <div class="lab-card">
+        <h3>10. 💬 Mensaje de "premio"</h3>
+        <p>SMS ficticio: "¡Ganaste un iPhone! Reclama en http://premio-falso.tk y paga 1 peso de envío."</p>
+        <div class="lab-exercise">
+          <div class="lab-options">
+            <button class="btn btn-secondary btn-sm" data-lab="premio" data-answer="click">Entrar y pagar</button>
+            <button class="btn btn-secondary btn-sm" data-lab="premio" data-answer="ignore">Ignorarlo. Es una estafa típica</button>
+            <button class="btn btn-secondary btn-sm" data-lab="premio" data-answer="data">Dejar nombre y tarjeta "por si acaso"</button>
+          </div>
+          <div id="lab-premio-feedback"></div>
+        </div>
+      </div>
+
+      <div class="lab-card">
+        <h3>11. 🖥️ Pantalla bloqueada</h3>
+        <p>Sales 10 minutos del aula o la oficina. Tu sesión sigue abierta. ¿Qué es más seguro?</p>
+        <div class="lab-exercise">
+          <div class="lab-options">
+            <button class="btn btn-secondary btn-sm" data-lab="lock" data-answer="leave">Dejarla abierta, total vuelves pronto</button>
+            <button class="btn btn-secondary btn-sm" data-lab="lock" data-answer="lock">Bloquear la pantalla</button>
+            <button class="btn btn-secondary btn-sm" data-lab="lock" data-answer="pass">Escribir la contraseña en un papel al lado</button>
+          </div>
+          <div id="lab-lock-feedback"></div>
+        </div>
+      </div>
+
+      <div class="lab-card">
+        <h3>12. 🍪 Cookies y privacidad</h3>
+        <p>Un sitio ficticio muestra: "Aceptar todas las cookies" o "Solo las necesarias". ¿Qué es mejor para tu privacidad?</p>
+        <div class="lab-exercise">
+          <div class="lab-options">
+            <button class="btn btn-secondary btn-sm" data-lab="cookies" data-answer="all">Aceptar todas siempre</button>
+            <button class="btn btn-secondary btn-sm" data-lab="cookies" data-answer="needed">Elegir solo las necesarias</button>
+            <button class="btn btn-secondary btn-sm" data-lab="cookies" data-answer="random">Pulsar lo primero que salga</button>
+          </div>
+          <div id="lab-cookies-feedback"></div>
         </div>
       </div>`;
   }
@@ -690,6 +784,41 @@
         B: { correct: true, msg: 'Correcto. Un USB desconocido puede contener malware.' },
         C: { correct: false, msg: 'Excelente práctica.' },
         D: { correct: false, msg: 'Recomendable.' }
+      },
+      permisos: {
+        all: { correct: false, msg: 'Incorrecto. Una linterna no necesita contactos, SMS ni ubicación.' },
+        needed: { correct: true, msg: 'Correcto. Da solo lo necesario o no instales apps que piden de más.' },
+        ignore: { correct: false, msg: 'Incorrecto. Esos permisos extra pueden usarse para rastrearte o leer datos.' }
+      },
+      wifi: {
+        any: { correct: false, msg: 'Incorrecto. Una de esas redes podría ser falsa (Evil Twin).' },
+        ask: { correct: true, msg: 'Correcto. Confirma la red oficial y no hagas banca ni compras ahí si puedes evitarlo.' },
+        bank: { correct: false, msg: 'Incorrecto. Mejor señal no significa red segura.' }
+      },
+      adjunto: {
+        open: { correct: false, msg: 'Incorrecto. Un .zip.exe es una señal clásica de malware.' },
+        delete: { correct: true, msg: 'Correcto. No lo abras. Elimínalo o repórtalo.' },
+        forward: { correct: false, msg: 'Incorrecto. Reenviarlo puede contagiar a más personas.' }
+      },
+      otp: {
+        send: { correct: false, msg: 'Incorrecto. Quien tiene ese código puede entrar a tu cuenta.' },
+        no: { correct: true, msg: 'Correcto. El soporte real no te pide el código 2FA por chat.' },
+        photo: { correct: false, msg: 'Incorrecto. Una captura también entrega el código.' }
+      },
+      premio: {
+        click: { correct: false, msg: 'Incorrecto. Es una estafa clásica para robar dinero o datos.' },
+        ignore: { correct: true, msg: 'Correcto. Los premios reales no llegan por SMS dudosos pidiendo pago.' },
+        data: { correct: false, msg: 'Incorrecto. Nunca des tarjeta por un "premio" inesperado.' }
+      },
+      lock: {
+        leave: { correct: false, msg: 'Incorrecto. Alguien podría usar tu sesión.' },
+        lock: { correct: true, msg: 'Correcto. Bloquear evita que otros vean o usen tu cuenta.' },
+        pass: { correct: false, msg: 'Incorrecto. Un papel con la contraseña es peor.' }
+      },
+      cookies: {
+        all: { correct: false, msg: 'Incorrecto. "Todas" suele incluir rastreadores de publicidad.' },
+        needed: { correct: true, msg: 'Correcto. Las necesarias suelen bastar para que el sitio funcione.' },
+        random: { correct: false, msg: 'Incorrecto. Vale la pena leer un segundo antes de aceptar.' }
       }
     };
     const result = feedbacks[lab] && feedbacks[lab][answer];
