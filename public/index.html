@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cewyx — Plataforma de Ciberseguridad</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+</head>
+<body>
+  <!-- Pantalla de configuración inicial (primer administrador) -->
+  <div id="setup-screen" class="auth-screen hidden">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <span class="logo-icon">🛡️</span>
+        <h1>Cewyx</h1>
+        <p class="auth-subtitle">Configuración inicial</p>
+      </div>
+      <p class="setup-info">No existe ningún administrador. Crea el primer administrador para comenzar.</p>
+      <form id="setup-form">
+        <div class="form-group">
+          <label for="setup-name">Nombre completo</label>
+          <input type="text" id="setup-name" required minlength="2" placeholder="Tu nombre">
+        </div>
+        <div class="form-group">
+          <label for="setup-email">Correo electrónico</label>
+          <input type="email" id="setup-email" required placeholder="admin@ejemplo.com">
+        </div>
+        <div class="form-group">
+          <label for="setup-password">Contraseña</label>
+          <input type="password" id="setup-password" required minlength="6" placeholder="Mínimo 6 caracteres">
+        </div>
+        <div class="form-group">
+          <label for="setup-password2">Confirmar contraseña</label>
+          <input type="password" id="setup-password2" required minlength="6" placeholder="Repite la contraseña">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Crear Administrador</button>
+      </form>
+      <div id="setup-error" class="error-msg hidden"></div>
+    </div>
+  </div>
+
+  <!-- Pantalla de Login / Registro -->
+  <div id="auth-screen" class="auth-screen hidden">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <span class="logo-icon">🛡️</span>
+        <h1>Cewyx</h1>
+        <p class="auth-subtitle">Plataforma de aprendizaje en ciberseguridad</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Iniciar sesión</button>
+        <button class="auth-tab" data-tab="register">Registrarse</button>
+      </div>
+
+      <!-- Login -->
+      <form id="login-form" class="auth-form">
+        <div class="form-group">
+          <label for="login-email">Correo electrónico</label>
+          <input type="email" id="login-email" required placeholder="tu@correo.com">
+        </div>
+        <div class="form-group">
+          <label for="login-password">Contraseña</label>
+          <input type="password" id="login-password" required placeholder="Tu contraseña">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Entrar</button>
+      </form>
+
+      <!-- Registro -->
+      <form id="register-form" class="auth-form hidden">
+        <div class="form-group">
+          <label for="reg-name">Nombre completo</label>
+          <input type="text" id="reg-name" required minlength="2" placeholder="Tu nombre">
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Correo electrónico</label>
+          <input type="email" id="reg-email" required placeholder="tu@correo.com">
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Contraseña</label>
+          <input type="password" id="reg-password" required minlength="6" placeholder="Mínimo 6 caracteres">
+        </div>
+        <div class="form-group">
+          <label for="reg-password2">Confirmar contraseña</label>
+          <input type="password" id="reg-password2" required minlength="6" placeholder="Repite la contraseña">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Crear cuenta</button>
+      </form>
+
+      <div id="auth-error" class="error-msg hidden"></div>
+    </div>
+  </div>
+
+  <!-- Aplicación principal -->
+  <div id="app" class="hidden">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <span class="logo-icon">🛡️</span>
+        <span class="logo-text">Cewyx</span>
+        <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Cerrar menú">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-view="dashboard">
+          <span class="nav-icon">📊</span> Dashboard
+        </a>
+        <a href="#" class="nav-item" data-view="courses">
+          <span class="nav-icon">📚</span> Cursos
+        </a>
+        <a href="#" class="nav-item" data-view="labs">
+          <span class="nav-icon">🧪</span> Laboratorios
+        </a>
+        <a href="#" class="nav-item" data-view="progress">
+          <span class="nav-icon">📈</span> Progreso
+        </a>
+        <a href="#" class="nav-item" data-view="results">
+          <span class="nav-icon">🏆</span> Resultados
+        </a>
+        <a href="#" class="nav-item" data-view="profile">
+          <span class="nav-icon">👤</span> Perfil
+        </a>
+        <div class="nav-divider admin-only hidden"></div>
+        <a href="#" class="nav-item admin-only hidden" data-view="admin-users">
+          <span class="nav-icon">👥</span> Usuarios
+        </a>
+        <a href="#" class="nav-item admin-only hidden" data-view="admin-courses">
+          <span class="nav-icon">✏️</span> Gestionar cursos
+        </a>
+        <a href="#" class="nav-item admin-only hidden" data-view="admin-results">
+          <span class="nav-icon">📋</span> Resultados globales
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="logout-btn" class="btn btn-outline btn-full">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <!-- Overlay móvil -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <!-- Contenido principal -->
+    <main id="main-content" class="main-content">
+      <header class="topbar">
+        <button id="menu-btn" class="menu-btn" aria-label="Abrir menú">☰</button>
+        <h2 id="page-title">Dashboard</h2>
+        <div class="topbar-user">
+          <span id="user-greeting"></span>
+          <span id="user-role-badge" class="role-badge"></span>
+        </div>
+      </header>
+
+      <div id="view-container" class="view-container">
+        <!-- Las vistas se renderizan aquí dinámicamente -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal genérico -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">Título</h3>
+        <button id="modal-close" class="modal-close">✕</button>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Toast notificaciones -->
+  <div id="toast-container"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
