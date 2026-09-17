@@ -225,6 +225,9 @@
       lesson: 'Lección',
       quiz: 'Cuestionario',
       labs: 'Laboratorios',
+      'lab-chat': 'Bot de ingeniería social',
+      'lab-msg': 'Mensaje phishing ficticio',
+      'lab-term': 'Terminal de práctica',
       progress: 'Progreso',
       results: 'Resultados',
       profile: 'Perfil',
@@ -320,7 +323,10 @@
         case 'course-detail': container.innerHTML = await renderCourseDetail(); break;
         case 'lesson': container.innerHTML = await renderLesson(); break;
         case 'quiz': container.innerHTML = await renderQuiz(); break;
-        case 'labs': container.innerHTML = renderLabs(); break;
+        case 'labs': container.innerHTML = await renderLabs(); break;
+        case 'lab-chat': container.innerHTML = renderLabChat(); break;
+        case 'lab-msg': container.innerHTML = renderLabMsg(); break;
+        case 'lab-term': container.innerHTML = renderLabTerm(); break;
         case 'progress': container.innerHTML = await renderProgress(); break;
         case 'results': container.innerHTML = await renderResults(); break;
         case 'profile': container.innerHTML = renderProfile(); break;
@@ -576,10 +582,56 @@
     toast(passed ? 'Cuestionario aprobado' : 'Cuestionario completado', passed ? 'success' : 'info');
   }
 
-  function renderLabs() {
+  function userLevel() {
+    const labs = currentUser.labs || { done: [], xp: 0 };
+    const xp = labs.xp || 0;
+    const level = Math.min(10, Math.floor(xp / 80) + 1);
+    return { xp, level, done: labs.done || [] };
+  }
+
+  async function completeLab(labId, xp) {
+    try {
+      const data = await api('/labs', { method: 'PUT', body: JSON.stringify({ labId, xp }) });
+      currentUser.labs = data.labs;
+      toast('Laboratorio registrado · +' + (xp || 15) + ' XP', 'success');
+    } catch (e) {
+      toast(e.message, 'error');
+    }
+  }
+
+  async function renderLabs() {
+    await refreshMe();
+    const lv = userLevel();
     return `
-      <h3 class="section-title">Laboratorios educativos</h3>
-      <p style="color:var(--text-secondary);margin-bottom:1.5rem">12 ejercicios interactivos con datos 100% ficticios. Solo para aprendizaje.</p>
+      <div class="welcome-banner">
+        <h2>Nivel ${lv.level} · ${lv.xp} XP</h2>
+        <p>Todo es ficticio y solo para practicar. Nunca uses esto contra personas reales.</p>
+        <div class="progress-bar" style="max-width:320px;margin-top:0.8rem"><div class="progress-bar-fill" style="width:${Math.min(100, (lv.xp % 80) / 80 * 100)}%"></div></div>
+        <div class="progress-text">Labs hechos: ${lv.done.length}</div>
+      </div>
+      <h3 class="section-title">Misiones interactivas</h3>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon">🤖</div>
+          <h3>Chat con “Alex”</h3>
+          <p>Un bot se hace pasar por soporte de TI. Practica no entregar datos.</p>
+          <button class="btn btn-primary btn-sm" data-action="lab-chat">Abrir chat</button>
+        </div>
+        <div class="card">
+          <div class="card-icon">💬</div>
+          <h3>Mensaje tipo WhatsApp</h3>
+          <p>Simula cómo te escribirían para un phishing. Decide qué responder.</p>
+          <button class="btn btn-primary btn-sm" data-action="lab-msg">Ver conversación</button>
+        </div>
+        <div class="card">
+          <div class="card-icon">💻</div>
+          <h3>Terminal de práctica</h3>
+          <p>Comandos seguros de aprendizaje. No es una terminal real del sistema.</p>
+          <button class="btn btn-primary btn-sm" data-action="lab-term">Abrir terminal</button>
+        </div>
+      </div>
+      <h3 class="section-title">Ejercicios rápidos</h3>
+      <p style="color:var(--text-secondary);margin-bottom:1.5rem">Datos 100% ficticios. Solo aprendizaje.</p>
 
       <div class="lab-card">
         <h3>1. 🎣 Identificar phishing</h3>
@@ -757,6 +809,53 @@
       </div>`;
   }
 
+  function renderLabChat() {
+    return `
+      <button class="btn btn-outline btn-sm" data-action="go-labs">← Laboratorios</button>
+      <div class="sim-warn">SIMULACIÓN · Personaje ficticio “Alex de TI”. No hay sistema real ni datos reales.</div>
+      <div class="chat-sim" id="chat-box">
+        <div class="chat-bubble bot"><strong>Alex (TI ficticio)</strong><br>Hola, soy Alex del área de TI. Detectamos un acceso raro en tu cuenta de la empresa ficticia NovaCorp. ¿Puedes confirmar tu usuario?</div>
+      </div>
+      <div class="chat-actions" id="chat-actions">
+        <button class="btn btn-secondary btn-sm" data-chat="give-user">Darle mi usuario</button>
+        <button class="btn btn-secondary btn-sm" data-chat="ask-id">Pedirle que se identifique</button>
+        <button class="btn btn-primary btn-sm" data-chat="hang">Colgar y llamar a TI por el directorio oficial</button>
+      </div>
+      <p id="chat-end" style="margin-top:1rem;color:var(--text-secondary)"></p>`;
+  }
+
+  function renderLabMsg() {
+    return `
+      <button class="btn btn-outline btn-sm" data-action="go-labs">← Laboratorios</button>
+      <div class="sim-warn">SIMULACIÓN de chat. El paquete, el número y el link son falsos.</div>
+      <div class="wa-sim">
+        <div class="wa-head">+52 618 555 0199 · “Paquetería MX”</div>
+        <div class="wa-msg">Hola buen día 📦 tu envío quedó detenido en aduana ficticia. Paga $12 aquí o se devuelve hoy: http://paq-mx-seguro.tk/pago</div>
+        <div class="wa-msg">Si no respondes en 20 min se cancela. Mándame también el código que te llegó por SMS 🙏</div>
+      </div>
+      <div class="lab-options" style="margin-top:1rem">
+        <button class="btn btn-danger btn-sm" data-msg="pay">Pagar y mandar el código</button>
+        <button class="btn btn-secondary btn-sm" data-msg="ask">Preguntar de qué paquete se trata</button>
+        <button class="btn btn-primary btn-sm" data-msg="ignore">No responder. Verificar en la app oficial</button>
+      </div>
+      <div id="msg-fb" style="margin-top:1rem"></div>`;
+  }
+
+  function renderLabTerm() {
+    return `
+      <button class="btn btn-outline btn-sm" data-action="go-labs">← Laboratorios</button>
+      <div class="sim-warn">Terminal FICTICIA. No ejecuta nada en tu computadora ni en el servidor.</div>
+      <div class="term" id="term-out">
+        <div>Cewyx Lab Terminal v1 · solo práctica</div>
+        <div>Escribe <code>help</code> y pulsa Enter.</div>
+      </div>
+      <form id="term-form" style="display:flex;gap:0.5rem;margin-top:0.6rem">
+        <span style="color:var(--accent)">$</span>
+        <input id="term-in" autocomplete="off" placeholder="help">
+        <button class="btn btn-primary btn-sm" type="submit">Enter</button>
+      </form>`;
+  }
+
   function handleLabAnswer(lab, answer) {
     const feedbacks = {
       phishing: {
@@ -910,10 +1009,17 @@
     if (currentUser.role !== 'admin') return '<p>Acceso denegado.</p>';
     const data = await api('/users');
     const users = data.users || [];
-    const rows = users.map(u => `
+    const rows = users.map(u => {
+      const xp = (u.labs && u.labs.xp) || 0;
+      const lvl = Math.min(10, Math.floor(xp / 80) + 1);
+      const labsN = (u.labs && u.labs.done && u.labs.done.length) || 0;
+      const coursesN = Object.keys(u.progress || {}).length;
+      return `
       <tr>
         <td>${escapeHtml(u.name)}</td>
         <td>${escapeHtml(u.email)}</td>
+        <td>Nv. ${lvl} · ${xp} XP</td>
+        <td>${labsN} labs · ${coursesN} cursos tocados</td>
         <td><span class="badge ${u.role === 'admin' ? 'badge-admin' : 'badge-user'}">${u.role}</span></td>
         <td><span class="badge ${u.blocked ? 'badge-blocked' : 'badge-active'}">${u.blocked ? 'Bloqueado' : 'Activo'}</span></td>
         <td class="actions-cell">
@@ -923,7 +1029,8 @@
             <button class="btn btn-sm btn-danger" data-admin="delete-user" data-id="${u.id}">Eliminar</button>
           ` : '<span style="color:var(--text-muted);font-size:0.85rem">Tú</span>'}
         </td>
-      </tr>`).join('');
+      </tr>`;
+    }).join('');
 
     return `
       <div class="search-bar">
@@ -932,7 +1039,7 @@
       <div class="table-wrapper">
         <table>
           <thead>
-            <tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr>
+            <tr><th>Nombre</th><th>Correo</th><th>Nivel</th><th>Progreso</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr>
           </thead>
           <tbody id="users-tbody">${rows}</tbody>
         </table>
@@ -1069,6 +1176,15 @@
           case 'go-labs':
             navigate('labs');
             break;
+          case 'lab-chat':
+            navigate('lab-chat');
+            break;
+          case 'lab-msg':
+            navigate('lab-msg');
+            break;
+          case 'lab-term':
+            navigate('lab-term');
+            break;
           case 'go-results':
             navigate('results');
             break;
@@ -1092,8 +1208,73 @@
     });
 
     container.querySelectorAll('[data-lab]').forEach(btn => {
-      btn.addEventListener('click', () => handleLabAnswer(btn.dataset.lab, btn.dataset.answer));
+      btn.addEventListener('click', async () => {
+        handleLabAnswer(btn.dataset.lab, btn.dataset.answer);
+        const okMap = { phishing: 'phish', urls: 'B', passwords: '2', social: 'verify', behavior: 'B', permisos: 'needed', wifi: 'ask', adjunto: 'delete', otp: 'no', premio: 'ignore', lock: 'lock', cookies: 'needed' };
+        if (okMap[btn.dataset.lab] === btn.dataset.answer) await completeLab('quick-' + btn.dataset.lab, 10);
+      });
     });
+
+    container.querySelectorAll('[data-chat]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const box = document.getElementById('chat-box');
+        const end = document.getElementById('chat-end');
+        const act = document.getElementById('chat-actions');
+        const choice = btn.dataset.chat;
+        const you = { 'give-user': 'Claro, mi usuario es ana.demo', 'ask-id': '¿Puedes darme tu extensión y ticket?', 'hang': 'Prefiero verificar por el canal oficial.' };
+        box.innerHTML += '<div class="chat-bubble me">Tú: ' + escapeHtml(you[choice]) + '</div>';
+        if (choice === 'give-user') {
+          box.innerHTML += '<div class="chat-bubble bot"><strong>Alex</strong><br>Perfecto. Ahora pásame la contraseña para “desbloquear” el acceso…</div>';
+          end.innerHTML = '<span style="color:var(--danger)">Caíste en la trampa de la simulación. Un técnico real no pide la contraseña por chat.</span>';
+          act.innerHTML = '<button class="btn btn-secondary btn-sm" data-action="lab-chat">Reintentar</button>';
+          act.querySelector('[data-action]').onclick = () => navigate('lab-chat');
+        } else if (choice === 'ask-id') {
+          box.innerHTML += '<div class="chat-bubble bot"><strong>Alex</strong><br>No tengo ticket. Es urgente. Si no me das la clave en 5 minutos se borran tus archivos.</div>';
+          end.textContent = 'Sigue la presión. La respuesta segura es cortar y verificar tú.';
+        } else {
+          box.innerHTML += '<div class="chat-bubble bot"><strong>Sistema</strong><br>Bien. Colgaste. En la vida real llamarías al número interno de TI, no al del chat.</div>';
+          end.innerHTML = '<span style="color:var(--success)">Respuesta correcta. No entregaste secretos.</span>';
+          act.innerHTML = '';
+          await completeLab('chat-alex', 40);
+        }
+      });
+    });
+
+    container.querySelectorAll('[data-msg]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const fb = document.getElementById('msg-fb');
+        const v = btn.dataset.msg;
+        if (v === 'pay') fb.innerHTML = '<p style="color:var(--danger)">Mal. Ese link y ese código son la trampa. En la vida real podrías perder dinero o la cuenta.</p>';
+        else if (v === 'ask') fb.innerHTML = '<p style="color:var(--warning)">Mejor que pagar, pero el chat sigue siendo falso. No des datos. Verifica en la app de la paquetería que tú abras.</p>';
+        else {
+          fb.innerHTML = '<p style="color:var(--success)">Correcto. Los envíos reales se consultan en la app oficial, no en un link de WhatsApp.</p>';
+          await completeLab('wa-phish', 35);
+        }
+      });
+    });
+
+    const termForm = document.getElementById('term-form');
+    if (termForm) {
+      termForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = document.getElementById('term-in');
+        const out = document.getElementById('term-out');
+        const cmd = (input.value || '').trim().toLowerCase();
+        input.value = '';
+        const replies = {
+          help: 'Comandos: help, whoami, scan, phish, clear, hint',
+          whoami: 'usuario_practica@cewyx-lab (ficticio)',
+          scan: 'Puertos ficticios: 22 cerrado · 80 abierto · 445 filtrado. Esto no escanea tu red real.',
+          phish: 'Indicadores: dominio .tk, urgencia, pedido de código SMS. No abras el link.',
+          hint: 'Un admin real no pide tu contraseña por terminal ni por chat.',
+          clear: ''
+        };
+        if (cmd === 'clear') out.innerHTML = '';
+        else out.innerHTML += '<div>$ ' + escapeHtml(cmd) + '</div><div>' + escapeHtml(replies[cmd] || 'Comando no existe en este lab. Prueba help.') + '</div>';
+        out.scrollTop = out.scrollHeight;
+        if (cmd === 'phish' || cmd === 'scan') await completeLab('term-' + cmd, 15);
+      });
+    }
 
     const passForm = document.getElementById('change-pass-form');
     if (passForm) {

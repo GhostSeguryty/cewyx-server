@@ -1059,3 +1059,13 @@ tr:last-child td { border-bottom: none; }
 .view-container > * {
   animation: fadeInUp 0.3s ease;
 }
+
+.sim-warn { background:#3b1d10; color:#fdba74; padding:0.7rem 1rem; border-radius:10px; margin:0.8rem 0 1rem; font-size:0.9rem; }
+.chat-sim, .wa-sim, .term { background:#0b1220; border:1px solid var(--border); border-radius:12px; padding:1rem; max-width:640px; }
+.chat-bubble { padding:0.65rem 0.8rem; border-radius:10px; margin:0.45rem 0; max-width:90%; }
+.chat-bubble.bot { background:#1e293b; }
+.chat-bubble.me { background:#134e4a; margin-left:auto; }
+.wa-head { font-size:0.85rem; color:var(--accent); margin-bottom:0.6rem; }
+.wa-msg { background:#14532d; padding:0.7rem; border-radius:12px; margin:0.4rem 0; }
+.term { font-family: ui-monospace, monospace; font-size:0.85rem; min-height:180px; max-height:280px; overflow:auto; }
+.chat-actions { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.7rem; }
