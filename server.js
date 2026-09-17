@@ -120,6 +120,9 @@ async function initStore() {
     if (!Array.isArray(memCourses) || memCourses.length === 0) {
       memCourses = getDefaultCourses();
       await kvSet('courses', memCourses);
+    } else {
+      memCourses = mergeDefaultCourses(memCourses);
+      await kvSet('courses', memCourses);
     }
     if (!Array.isArray(memUsers)) memUsers = [];
     if (!Array.isArray(memResults)) memResults = [];
@@ -134,7 +137,8 @@ async function initStore() {
     memCourses = getDefaultCourses();
     writeJSON(COURSES_FILE, memCourses);
   } else {
-    memCourses = courses;
+    memCourses = mergeDefaultCourses(courses);
+    writeJSON(COURSES_FILE, memCourses);
   }
   memResults = readJSON(RESULTS_FILE, []);
   console.log('  Almacenamiento: archivos JSON locales');
@@ -159,6 +163,15 @@ function publicUser(u) {
 }
 
 // ---------- Cursos por defecto ----------
+function mergeDefaultCourses(existing) {
+  const byId = {};
+  existing.forEach((c) => { byId[c.id] = c; });
+  getDefaultCourses().forEach((c) => {
+    if (!byId[c.id]) existing.push(c);
+  });
+  return existing;
+}
+
 function getDefaultCourses() {
   return [
     {
@@ -494,6 +507,36 @@ function getDefaultCourses() {
         { q: '¿Qué deberías hacer con los permisos de las apps?', options: ['Conceder todos siempre', 'Revisarlos y dar solo los necesarios', 'Ignorarlos', 'Desactivar internet'], correct: 1 },
         { q: 'Instalar apps fuera de las tiendas oficiales:', options: ['Siempre es más seguro', 'Aumenta el riesgo de malware', 'No tiene efecto', 'Mejora el rendimiento'], correct: 1 }
       ]
+    },
+    {
+      id: 'c9',
+      title: 'Ingeniería social avanzada',
+      description: 'Cómo operan las personas que intentan engañarte por chat, llamada o mensaje. Solo escenarios ficticios de aprendizaje.',
+      icon: '🎭',
+      lessons: [
+        { title: 'Presión y urgencia', content: '<p>El atacante ficticio acelera: “tienes 10 minutos o se bloquea tu cuenta”. La prisa baja tu juicio.</p><div class="tip-box">Regla: si urge tanto, cuelga y verifica por un canal que inicies tú.</div>' },
+        { title: 'Suplantación de identidad', content: '<p>Se hacen pasar por banco, TI, un familiar o un compañero. Usan datos públicos (nombre, ciudad) para parecer reales.</p>' },
+        { title: 'Qué nunca entregar', content: '<ul><li>Contraseñas</li><li>Códigos 2FA</li><li>Números de tarjeta</li><li>Fotos de INE o pasaporte por chat dudoso</li></ul>' }
+      ],
+      questions: [
+        { q: 'Si un “soporte” pide el código SMS ahora mismo:', options: ['Se lo envías', 'No lo envías y verificas por la app oficial', 'Le das la contraseña en su lugar', 'Reenvías el SMS a un amigo'], correct: 1 },
+        { q: 'La urgencia extrema en un mensaje suele ser:', options: ['Señal de servicio premium', 'Táctica de ingeniería social', 'Prueba de que es el banco', 'Un error del sistema'], correct: 1 },
+        { q: 'Un chat que conoce tu nombre:', options: ['Es 100% de confianza', 'Puede haberlo sacado de redes; no basta para confiar', 'Significa que es tu familiar', 'Autoriza dar datos'], correct: 1 }
+      ]
+    },
+    {
+      id: 'c10',
+      title: 'Phishing en mensajería',
+      description: 'SMS, WhatsApp y correos ficticios: cómo se ven los enlaces trampa y cómo responder.',
+      icon: '📨',
+      lessons: [
+        { title: 'Anatomía de un mensaje trampa', content: '<p>Remitente raro, link acortado, falta de ortografía o dominio que imita una marca (<code>banc0-seguro.tk</code>).</p>' },
+        { title: 'Cómo verificar', content: '<p>No pulses el link. Abre la app oficial o el sitio escribiendo tú la dirección. Llama al número que sale en tu estado de cuenta, no al del mensaje.</p>' }
+      ],
+      questions: [
+        { q: 'Un SMS de “paquete retenido” con link corto:', options: ['Siempre es del correo real', 'Puede ser phishing; verifica en la app oficial', 'Hay que pagar ya', 'Hay que reenviar el SMS'], correct: 1 },
+        { q: 'La forma más segura de entrar al banco es:', options: ['El link del mensaje', 'La app o la web que escribes tú', 'Un QR de un poster', 'Un pop-up'], correct: 1 }
+      ]
     }
   ];
 }
@@ -670,6 +713,18 @@ app.put('/api/progress/:courseId', requireAuth, (req, res) => {
   };
   saveUsers(users);
   res.json({ progress: users[idx].progress[courseId] });
+});
+
+app.put('/api/labs', requireAuth, (req, res) => {
+  const { labId, xp } = req.body || {};
+  if (!labId) return res.status(400).json({ error: 'labId requerido' });
+  const users = getUsers();
+  const idx = users.findIndex(u => u.id === req.user.id);
+  if (!users[idx].labs) users[idx].labs = { done: [], xp: 0 };
+  if (!users[idx].labs.done.includes(labId)) users[idx].labs.done.push(String(labId));
+  users[idx].labs.xp = (users[idx].labs.xp || 0) + (Number(xp) || 15);
+  saveUsers(users);
+  res.json({ labs: users[idx].labs });
 });
 
 // ---------- API: Cursos ----------
