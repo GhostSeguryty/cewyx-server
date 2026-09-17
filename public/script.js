@@ -631,7 +631,7 @@
         </div>
       </div>
       <h3 class="section-title">Ejercicios rápidos</h3>
-      <p style="color:var(--text-secondary);margin-bottom:1.5rem">Datos 100% ficticios. Solo aprendizaje.</p>
+      <p style="color:var(--text-secondary);margin-bottom:1.5rem">20 ejercicios + 3 misiones. Datos 100% ficticios.</p>
 
       <div class="lab-card">
         <h3>1. 🎣 Identificar phishing</h3>
@@ -806,6 +806,80 @@
           </div>
           <div id="lab-cookies-feedback"></div>
         </div>
+      </div>
+
+      <div class="lab-card">
+        <h3>13. 📞 Voz de un familiar (ficticio)</h3>
+        <p>Audio: “Mamá, tuve un accidente, transfiere $8,000 a esta cuenta ya.”</p>
+        <div class="lab-options">
+          <button class="btn btn-secondary btn-sm" data-lab="voz" data-answer="pay">Transferir ya</button>
+          <button class="btn btn-secondary btn-sm" data-lab="voz" data-answer="call">Colgar y marcar yo al número que ya tenía</button>
+          <button class="btn btn-secondary btn-sm" data-lab="voz" data-answer="same">Seguir en esa misma llamada</button>
+        </div>
+        <div id="lab-voz-feedback"></div>
+      </div>
+      <div class="lab-card">
+        <h3>14. 💼 Oferta de trabajo</h3>
+        <p>Te piden pagar un “curso de inducción” de $900 para entrar a una empresa ficticia.</p>
+        <div class="lab-options">
+          <button class="btn btn-secondary btn-sm" data-lab="job" data-answer="pay">Pagar para no perder la vacante</button>
+          <button class="btn btn-secondary btn-sm" data-lab="job" data-answer="no">No pagar. Las empresas no cobran por contratarte</button>
+        </div>
+        <div id="lab-job-feedback"></div>
+      </div>
+      <div class="lab-card">
+        <h3>15. 🏦 QR en un cajero</h3>
+        <p>Hay un QR pegado: “Nueva app del banco. Escanea.”</p>
+        <div class="lab-options">
+          <button class="btn btn-secondary btn-sm" data-lab="qr" data-answer="scan">Escanearlo</button>
+          <button class="btn btn-secondary btn-sm" data-lab="qr" data-answer="app">Ignorar el sticker y usar la app que ya tienes</button>
+        </div>
+        <div id="lab-qr-feedback"></div>
+      </div>
+      <div class="lab-card">
+        <h3>16. 💬 “Soy tu jefe”</h3>
+        <p>WhatsApp nuevo: “Estoy en junta, compra 3 tarjetas de regalo y mándame los códigos.”</p>
+        <div class="lab-options">
+          <button class="btn btn-secondary btn-sm" data-lab="jefe" data-answer="buy">Comprarlas</button>
+          <button class="btn btn-secondary btn-sm" data-lab="jefe" data-answer="check">Confirmar por otra vía (llamada o canal interno)</button>
+        </div>
+        <div id="lab-jefe-feedback"></div>
+      </div>
+      <div class="lab-card">
+        <h3>17. 🧾 SAT / apoyo ficticio</h3>
+        <p>SMS: “Tienes un saldo a favor. Da clic y captura tu RFC y NIP.”</p>
+        <div class="lab-options">
+          <button class="btn btn-secondary btn-sm" data-lab="sat" data-answer="click">Entrar y poner el NIP</button>
+          <button class="btn btn-secondary btn-sm" data-lab="sat" data-answer="portal">Entrar solo al portal oficial que escribes tú</button>
+        </div>
+        <div id="lab-sat-feedback"></div>
+      </div>
+      <div class="lab-card">
+        <h3>18. 💸 Inversión milagrosa</h3>
+        <p>“Deposita $2,000 y el bot te regresa $6,000 mañana.”</p>
+        <div class="lab-options">
+          <button class="btn btn-secondary btn-sm" data-lab="crypto" data-answer="yes">Depositar</button>
+          <button class="btn btn-secondary btn-sm" data-lab="crypto" data-answer="no">No. Promesa irreal = estafa</button>
+        </div>
+        <div id="lab-crypto-feedback"></div>
+      </div>
+      <div class="lab-card">
+        <h3>19. 🖥️ Pop-up de virus</h3>
+        <p>Pantalla: “Tu PC está infectada. Llama al 800-55-CEWYX y compra la licencia.”</p>
+        <div class="lab-options">
+          <button class="btn btn-secondary btn-sm" data-lab="popup" data-answer="call">Llamar y pagar</button>
+          <button class="btn btn-secondary btn-sm" data-lab="popup" data-answer="close">Cerrar el navegador. No llamar</button>
+        </div>
+        <div id="lab-popup-feedback"></div>
+      </div>
+      <div class="lab-card">
+        <h3>20. 🏨 Wi‑Fi del hotel</h3>
+        <p>Ves “Hotel_Gratis”, “Hotel-Free-Wifi” y “Hotel_Huespedes”.</p>
+        <div class="lab-options">
+          <button class="btn btn-secondary btn-sm" data-lab="hotel" data-answer="any">La de más barritas</button>
+          <button class="btn btn-secondary btn-sm" data-lab="hotel" data-answer="desk">Preguntar en recepción el nombre exacto</button>
+        </div>
+        <div id="lab-hotel-feedback"></div>
       </div>`;
   }
 
@@ -821,7 +895,11 @@
         <button class="btn btn-secondary btn-sm" data-chat="ask-id">Pedirle que se identifique</button>
         <button class="btn btn-primary btn-sm" data-chat="hang">Colgar y llamar a TI por el directorio oficial</button>
       </div>
-      <p id="chat-end" style="margin-top:1rem;color:var(--text-secondary)"></p>`;
+      <p id="chat-end" class="coach"></p>
+      <form id="chat-form" class="composer">
+        <input id="chat-in" maxlength="240" placeholder="Escribe tu respuesta…" autocomplete="off">
+        <button class="btn btn-primary" type="submit">Enviar</button>
+      </form>`;
   }
 
   function renderLabMsg() {
@@ -838,7 +916,11 @@
         <button class="btn btn-secondary btn-sm" data-msg="ask">Preguntar de qué paquete se trata</button>
         <button class="btn btn-primary btn-sm" data-msg="ignore">No responder. Verificar en la app oficial</button>
       </div>
-      <div id="msg-fb" style="margin-top:1rem"></div>`;
+      <div id="msg-fb" class="coach"></div>
+      <form id="wa-form" class="composer">
+        <input id="wa-in" maxlength="240" placeholder="Escribe un mensaje…" autocomplete="off">
+        <button class="btn btn-primary" type="submit">Enviar</button>
+      </form>`;
   }
 
   function renderLabTerm() {
@@ -846,8 +928,8 @@
       <button class="btn btn-outline btn-sm" data-action="go-labs">← Laboratorios</button>
       <div class="sim-warn">Terminal FICTICIA. No ejecuta nada en tu computadora ni en el servidor.</div>
       <div class="term" id="term-out">
-        <div>Cewyx Lab Terminal v1 · solo práctica</div>
-        <div>Escribe <code>help</code> y pulsa Enter.</div>
+        <div class="term-ok">Cewyx SOC Lab 2.0 — aislado · ficticio</div>
+        <div>Comandos: help, whoami, mail, scan, whois, analyze, phish, banner, clear</div>
       </div>
       <form id="term-form" style="display:flex;gap:0.5rem;margin-top:0.6rem">
         <span style="color:var(--accent)">$</span>
@@ -918,6 +1000,39 @@
         all: { correct: false, msg: 'Incorrecto. "Todas" suele incluir rastreadores de publicidad.' },
         needed: { correct: true, msg: 'Correcto. Las necesarias suelen bastar para que el sitio funcione.' },
         random: { correct: false, msg: 'Incorrecto. Vale la pena leer un segundo antes de aceptar.' }
+      },
+      voz: {
+        pay: { correct: false, msg: 'Incorrecto. Puede ser voz clonada. Verifica tú.' },
+        call: { correct: true, msg: 'Correcto. Cuelga y marca el número que ya tenías.' },
+        same: { correct: false, msg: 'Incorrecto. Quien llama controla la conversación.' }
+      },
+      job: {
+        pay: { correct: false, msg: 'Incorrecto. Cobrar por “dar el empleo” es estafa.' },
+        no: { correct: true, msg: 'Correcto. No pagues por que te contraten.' }
+      },
+      qr: {
+        scan: { correct: false, msg: 'Incorrecto. El sticker puede ir a una web falsa.' },
+        app: { correct: true, msg: 'Correcto. Usa la app oficial que ya instalaste.' }
+      },
+      jefe: {
+        buy: { correct: false, msg: 'Incorrecto. Pedir tarjetas de regalo es un clásico.' },
+        check: { correct: true, msg: 'Correcto. Confirma por otro canal.' }
+      },
+      sat: {
+        click: { correct: false, msg: 'Incorrecto. El NIP no se pone en un link de SMS.' },
+        portal: { correct: true, msg: 'Correcto. Entras tú al sitio oficial.' }
+      },
+      crypto: {
+        yes: { correct: false, msg: 'Incorrecto. Nadie multiplica dinero seguro en un día.' },
+        no: { correct: true, msg: 'Correcto. Es un gancho de inversión falsa.' }
+      },
+      popup: {
+        call: { correct: false, msg: 'Incorrecto. Es scareware para cobrarte.' },
+        close: { correct: true, msg: 'Correcto. Cierras y no llamas a ese número.' }
+      },
+      hotel: {
+        any: { correct: false, msg: 'Incorrecto. Puede ser una red señuelo.' },
+        desk: { correct: true, msg: 'Correcto. Confirmas el nombre en recepción.' }
       }
     };
     const result = feedbacks[lab] && feedbacks[lab][answer];
@@ -1210,45 +1325,90 @@
     container.querySelectorAll('[data-lab]').forEach(btn => {
       btn.addEventListener('click', async () => {
         handleLabAnswer(btn.dataset.lab, btn.dataset.answer);
-        const okMap = { phishing: 'phish', urls: 'B', passwords: '2', social: 'verify', behavior: 'B', permisos: 'needed', wifi: 'ask', adjunto: 'delete', otp: 'no', premio: 'ignore', lock: 'lock', cookies: 'needed' };
+        const okMap = { phishing: 'phish', urls: 'B', passwords: '2', social: 'verify', behavior: 'B', permisos: 'needed', wifi: 'ask', adjunto: 'delete', otp: 'no', premio: 'ignore', lock: 'lock', cookies: 'needed', voz: 'call', job: 'no', qr: 'app', jefe: 'check', sat: 'portal', crypto: 'no', popup: 'close', hotel: 'desk' };
         if (okMap[btn.dataset.lab] === btn.dataset.answer) await completeLab('quick-' + btn.dataset.lab, 10);
       });
     });
 
-    container.querySelectorAll('[data-chat]').forEach((btn) => {
-      btn.addEventListener('click', async () => {
+    function alexReply(text) {
+      const t = text.toLowerCase();
+      const leak = /(contraseña|password|clave|usuario\s*es|mi user|código|codigo|otp|\d{6})/.test(t);
+      const safe = /(no te creo|verificar|directorio|oficial|no te la doy|no te doy|llamo a ti|no mando|desconfío|desconfio)/.test(t);
+      if (leak) return { html: 'Gracias. Con eso ya “entré”. En un ataque real habrías perdido la cuenta.', bad: true };
+      if (safe) return { html: 'Ok… se corta la llamada. Hiciste lo correcto: no entregaste secretos y verificas por otro canal.', good: true };
+      if (/quién eres|quien eres|ticket|extensión|extension|jefe/.test(t)) return { html: 'No tengo ticket a la mano. Mira, si no me das la clave en 5 minutos se borran tus archivos. ¿Me la pasas ya?' };
+      return { html: 'Te escucho. Necesito usuario, contraseña o el código SMS para “liberar” la cuenta. Date prisa.' };
+    }
+
+    const chatForm = document.getElementById('chat-form');
+    if (chatForm) {
+      chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = document.getElementById('chat-in');
+        const text = (input.value || '').trim();
+        if (!text) return;
+        input.value = '';
         const box = document.getElementById('chat-box');
         const end = document.getElementById('chat-end');
-        const act = document.getElementById('chat-actions');
-        const choice = btn.dataset.chat;
-        const you = { 'give-user': 'Claro, mi usuario es ana.demo', 'ask-id': '¿Puedes darme tu extensión y ticket?', 'hang': 'Prefiero verificar por el canal oficial.' };
-        box.innerHTML += '<div class="chat-bubble me">Tú: ' + escapeHtml(you[choice]) + '</div>';
-        if (choice === 'give-user') {
-          box.innerHTML += '<div class="chat-bubble bot"><strong>Alex</strong><br>Perfecto. Ahora pásame la contraseña para “desbloquear” el acceso…</div>';
-          end.innerHTML = '<span style="color:var(--danger)">Caíste en la trampa de la simulación. Un técnico real no pide la contraseña por chat.</span>';
-          act.innerHTML = '<button class="btn btn-secondary btn-sm" data-action="lab-chat">Reintentar</button>';
-          act.querySelector('[data-action]').onclick = () => navigate('lab-chat');
-        } else if (choice === 'ask-id') {
-          box.innerHTML += '<div class="chat-bubble bot"><strong>Alex</strong><br>No tengo ticket. Es urgente. Si no me das la clave en 5 minutos se borran tus archivos.</div>';
-          end.textContent = 'Sigue la presión. La respuesta segura es cortar y verificar tú.';
-        } else {
-          box.innerHTML += '<div class="chat-bubble bot"><strong>Sistema</strong><br>Bien. Colgaste. En la vida real llamarías al número interno de TI, no al del chat.</div>';
-          end.innerHTML = '<span style="color:var(--success)">Respuesta correcta. No entregaste secretos.</span>';
-          act.innerHTML = '';
+        box.innerHTML += '<div class="chat-bubble me">' + escapeHtml(text) + '</div>';
+        const r = alexReply(text);
+        box.innerHTML += '<div class="chat-bubble bot"><b>Alex</b><br>' + r.html + '</div>';
+        box.scrollTop = box.scrollHeight;
+        if (r.bad) end.innerHTML = '<span style="color:var(--danger)">La simulación te pescó. Un TI real no pide contraseña ni 2FA por chat.</span>';
+        if (r.good) {
+          end.innerHTML = '<span style="color:var(--success)">Bien. Cortaste el engaño.</span>';
           await completeLab('chat-alex', 40);
+        }
+      });
+    }
+
+    container.querySelectorAll('[data-chat]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const map = { 'give-user': 'Te paso mi usuario ana.demo y la clave', 'ask-id': '¿Cuál es tu ticket y extensión?', 'hang': 'No te creo. Voy a verificar por el directorio oficial' };
+        const input = document.getElementById('chat-in');
+        if (input) {
+          input.value = map[btn.dataset.chat] || '';
+          document.getElementById('chat-form').requestSubmit();
         }
       });
     });
 
-    container.querySelectorAll('[data-msg]').forEach((btn) => {
-      btn.addEventListener('click', async () => {
+    function waReply(text) {
+      const t = text.toLowerCase();
+      if (/(pago|código|codigo|tarjeta|clabe|\d{6}|ya pagué|ya pague)/.test(t)) return { html: 'Listo, con ese dato el atacante ficticio ya tiene lo que quería.', bad: true };
+      if (/(no|estafa|falso|verificar|app oficial|no doy|no pago)/.test(t)) return { html: '…dejó de responder. Correcto: no pagaste ni diste el código.', good: true };
+      return { html: 'Sí sí es tu paquete jaja. El link es seguro 😅 mándame el código para no perderlo.' };
+    }
+
+    const waForm = document.getElementById('wa-form');
+    if (waForm) {
+      waForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = document.getElementById('wa-in');
+        const text = (input.value || '').trim();
+        if (!text) return;
+        input.value = '';
+        const box = document.getElementById('wa-box');
         const fb = document.getElementById('msg-fb');
-        const v = btn.dataset.msg;
-        if (v === 'pay') fb.innerHTML = '<p style="color:var(--danger)">Mal. Ese link y ese código son la trampa. En la vida real podrías perder dinero o la cuenta.</p>';
-        else if (v === 'ask') fb.innerHTML = '<p style="color:var(--warning)">Mejor que pagar, pero el chat sigue siendo falso. No des datos. Verifica en la app de la paquetería que tú abras.</p>';
-        else {
-          fb.innerHTML = '<p style="color:var(--success)">Correcto. Los envíos reales se consultan en la app oficial, no en un link de WhatsApp.</p>';
+        box.innerHTML += '<div class="wa-msg me">' + escapeHtml(text) + '</div>';
+        const r = waReply(text);
+        box.innerHTML += '<div class="wa-msg">' + r.html + '</div>';
+        box.scrollTop = box.scrollHeight;
+        if (r.bad) fb.innerHTML = '<span style="color:var(--danger)">Caíste en la simulación. Ese link .tk y el SMS son la trampa.</span>';
+        if (r.good) {
+          fb.innerHTML = '<span style="color:var(--success)">Bien. En la vida real abrirías la app oficial, no el chat.</span>';
           await completeLab('wa-phish', 35);
+        }
+      });
+    }
+
+    container.querySelectorAll('[data-msg]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const map = { pay: 'Ok te pago y te mando el código', ask: '¿De qué paquete hablas?', ignore: 'No, esto parece estafa. Voy a verificar en la app oficial' };
+        const input = document.getElementById('wa-in');
+        if (input) {
+          input.value = map[btn.dataset.msg] || '';
+          document.getElementById('wa-form').requestSubmit();
         }
       });
     });
@@ -1262,17 +1422,26 @@
         const cmd = (input.value || '').trim().toLowerCase();
         input.value = '';
         const replies = {
-          help: 'Comandos: help, whoami, scan, phish, clear, hint',
-          whoami: 'usuario_practica@cewyx-lab (ficticio)',
-          scan: 'Puertos ficticios: 22 cerrado · 80 abierto · 445 filtrado. Esto no escanea tu red real.',
-          phish: 'Indicadores: dominio .tk, urgencia, pedido de código SMS. No abras el link.',
-          hint: 'Un admin real no pide tu contraseña por terminal ni por chat.',
+          help: 'help whoami mail scan whois analyze phish banner hint clear',
+          whoami: 'practica@cewyx-lab  rol=estudiante  red=simulada',
+          mail: 'INBOX ficticio\n[!] URGENTE banc0-seguro.com — “valide su clave”\n[!] paq-mx-seguro.tk — cobro $12\n[*] Boletín interno NovaCorp — sin links raros',
+          scan: 'scan ficticio 10.0.0.8\n22/tcp closed ssh\n80/tcp open  http\n443/tcp open  https\n445/tcp filtered\n(no escanea tu red real)',
+          whois: 'dominio paq-mx-seguro.tk\ncreado: hace 2 días · país: n/d · SSL: no\nriesgo: alto · imita marca',
+          analyze: 'reglas: urgencia + link corto + pide OTP = phishing\nacción: no clic · verificar en app oficial',
+          phish: 'indicadores: .tk  “20 min”  código SMS  pago mínimo\nveredicto: NO entrar',
+          banner: 'CEWYX ████ SOC ████ training only',
+          hint: 'TI real no pide password ni OTP por chat.',
           clear: ''
         };
+        let key = cmd;
+        if (cmd.startsWith('whois')) key = 'whois';
         if (cmd === 'clear') out.innerHTML = '';
-        else out.innerHTML += '<div>$ ' + escapeHtml(cmd) + '</div><div>' + escapeHtml(replies[cmd] || 'Comando no existe en este lab. Prueba help.') + '</div>';
+        else {
+          const body = replies[key] || 'comando desconocido. prueba help';
+          out.innerHTML += '<div class="term-cmd">$ ' + escapeHtml(cmd) + '</div><pre class="term-pre">' + escapeHtml(body) + '</pre>';
+        }
         out.scrollTop = out.scrollHeight;
-        if (cmd === 'phish' || cmd === 'scan') await completeLab('term-' + cmd, 15);
+        if (key === 'phish' || key === 'scan' || key === 'analyze' || key === 'mail') await completeLab('term-' + key, 12);
       });
     }
 

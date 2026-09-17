@@ -1069,3 +1069,30 @@ tr:last-child td { border-bottom: none; }
 .wa-msg { background:#14532d; padding:0.7rem; border-radius:12px; margin:0.4rem 0; }
 .term { font-family: ui-monospace, monospace; font-size:0.85rem; min-height:180px; max-height:280px; overflow:auto; }
 .chat-actions { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.7rem; }
+
+.sim-shell { max-width: 560px; }
+.phone-frame { background:#0d1524; border:1px solid var(--border); border-radius:22px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,.45); }
+.phone-top { display:flex; gap:.75rem; align-items:center; padding:.85rem 1rem; background:#111c2e; border-bottom:1px solid var(--border); }
+.wa-top { background:#075e54; }
+.avatar-bot { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#00d4aa,#3b82f6); display:grid; place-items:center; font-weight:700; }
+.avatar-bot.pack { background:#128c7e; }
+.pill { margin-left:auto; font-size:.7rem; border:1px solid var(--accent); color:var(--accent); padding:.15rem .45rem; border-radius:999px; }
+.muted { color:var(--text-muted); font-size:.78rem; }
+.chat-sim, .wa-sim { min-height:280px; max-height:380px; overflow:auto; padding:1rem; }
+.chat-day { text-align:center; color:var(--text-muted); font-size:.75rem; margin-bottom:.6rem; }
+.composer { display:flex; gap:.5rem; padding:.7rem; background:#0b1220; }
+.composer input { flex:1; background:#1a2332; border:1px solid var(--border); color:#fff; border-radius:999px; padding:.6rem 1rem; }
+.coach { margin-top:.8rem; }
+.fake-link { color:#7dd3fc; text-decoration:underline; word-break:break-all; }
+.wa-msg.me { background:#056162; margin-left:2rem; }
+.term-window { max-width:720px; border:1px solid #123; border-radius:12px; overflow:hidden; background:#05080f; }
+.term-bar { background:#1b2433; padding:.45rem .7rem; display:flex; gap:.35rem; align-items:center; font-size:.8rem; color:#94a3b8; }
+.dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+.dot.r { background:#ef4444; } .dot.y { background:#f59e0b; } .dot.g { background:#22c55e; }
+.term { min-height:260px; max-height:380px; }
+.term-ok { color:#22c55e; }
+.term-cmd { color:#00d4aa; margin-top:.5rem; }
+.term-pre { white-space:pre-wrap; color:#cbd5e1; margin:0; font: inherit; }
+.term-composer { display:flex; gap:.5rem; padding:.5rem .7rem; background:#0b1220; align-items:center; }
+.term-composer input { flex:1; background:transparent; border:0; color:#d1fae5; font-family:ui-monospace,monospace; outline:none; }
+.prompt { color:#00d4aa; font-family:ui-monospace,monospace; font-size:.85rem; }
