@@ -537,6 +537,90 @@ function getDefaultCourses() {
         { q: 'Un SMS de “paquete retenido” con link corto:', options: ['Siempre es del correo real', 'Puede ser phishing; verifica en la app oficial', 'Hay que pagar ya', 'Hay que reenviar el SMS'], correct: 1 },
         { q: 'La forma más segura de entrar al banco es:', options: ['El link del mensaje', 'La app o la web que escribes tú', 'Un QR de un poster', 'Un pop-up'], correct: 1 }
       ]
+    },
+    {
+      id: 'c11',
+      title: 'Redes Wi‑Fi seguras',
+      description: 'Redes abiertas, Evil Twin ficticio y qué sí puedes hacer en una cafetería.',
+      icon: '📡',
+      lessons: [
+        { title: 'Red abierta', content: '<p>En Wi‑Fi sin contraseña el tráfico puede ser visto por otros en la misma red. Evita banca y correos sensibles.</p>' },
+        { title: 'Red falsa', content: '<p>Una red llamada igual que la cafetería puede ser un señuelo. Pregunta el nombre exacto al personal.</p>' }
+      ],
+      questions: [
+        { q: 'En un Wi‑Fi público lo más seguro es:', options: ['Hacer transferencias', 'Evitar datos bancarios o usar datos móviles/VPN de confianza', 'Desactivar el cifrado', 'Conectar USB'], correct: 1 },
+        { q: 'Una red con el mismo nombre del café:', options: ['Siempre es oficial', 'Puede ser señuelo; confirma el nombre', 'Es más rápida', 'Pide tu INE'], correct: 1 }
+      ]
+    },
+    {
+      id: 'c12',
+      title: 'Contraseñas y 2FA',
+      description: 'Gestores, frases largas y por qué el código SMS no se comparte.',
+      icon: '🔐',
+      lessons: [
+        { title: 'Una por sitio', content: '<p>Si reutilizas la misma clave y un sitio se filtra, el atacante prueba esa clave en el correo y el banco.</p>' },
+        { title: 'Segundo factor', content: '<p>El 2FA añade un código o llave. Nadie de “soporte” te lo debe pedir por chat.</p>' }
+      ],
+      questions: [
+        { q: 'Reutilizar la misma contraseña:', options: ['Es práctico y seguro', 'Multiplica el daño si un sitio se filtra', 'Reemplaza al 2FA', 'Engaña al phishing'], correct: 1 },
+        { q: 'Si te piden el código 2FA por WhatsApp:', options: ['Lo envías', 'No lo envías', 'Mandas captura', 'Lo dictas'], correct: 1 }
+      ]
+    },
+    {
+      id: 'c13',
+      title: 'Estafas de inversión y crypto',
+      description: 'Pirámides, “bots que duplican dinero” y romance scam. Casos ficticios.',
+      icon: '📉',
+      lessons: [
+        { title: 'Promesas imposibles', content: '<p>“Gana 30% semanal sin riesgo” no existe. Es gancho para que deposites.</p>' },
+        { title: 'Presión social', content: '<p>Testimonios, capturas editadas y un “mentor” por Telegram. Todo puede ser teatro.</p>' }
+      ],
+      questions: [
+        { q: 'Un bot que “duplica” tu depósito en 24 h:', options: ['Es tecnología nueva', 'Es una estafa típica', 'Está regulado siempre', 'Hay que invertir más'], correct: 1 },
+        { q: 'Si solo puedes retirar pagando una “tasa extra”:', options: ['Es normal', 'Suele ser la siguiente trampa', 'Prueba que es legal', 'Hay que pagar ya'], correct: 1 }
+      ]
+    },
+    {
+      id: 'c14',
+      title: 'Deepfakes y voz falsa',
+      description: 'Audios y videos que imitan a un familiar. Cómo frenar antes de transferir.',
+      icon: '🎙️',
+      lessons: [
+        { title: 'La llamada del “hijo”', content: '<p>Un audio urgente pidiendo dinero. Cuelga y llama tú al número que ya tenías.</p>' },
+        { title: 'Video no basta', content: '<p>Un video corto puede estar generado. Acuerda una palabra secreta en familia.</p>' }
+      ],
+      questions: [
+        { q: 'Te llaman con la voz de un familiar pidiendo un depósito ya:', options: ['Transfieres', 'Cuelgas y marcas tú el número conocido', 'Pides más datos en esa misma llamada', 'Publicas el audio'], correct: 1 },
+        { q: 'Una palabra secreta familiar sirve para:', options: ['Decorar', 'Verificar identidad fuera del engaño', 'Abrir WhatsApp', 'Pagar menos'], correct: 1 }
+      ]
+    },
+    {
+      id: 'c15',
+      title: 'Ransomware y copias',
+      description: 'Qué hacer (y qué no) si un aviso ficticio cifra archivos.',
+      icon: '💾',
+      lessons: [
+        { title: 'No pagar', content: '<p>Pagar no garantiza recuperar nada y financia el delito. Prioriza backups.</p>' },
+        { title: '3-2-1', content: '<p>3 copias, 2 medios, 1 fuera de línea o desconectada.</p>' }
+      ],
+      questions: [
+        { q: 'Ante ransomware la recomendación es:', options: ['Pagar al momento', 'No pagar, desconectar y restaurar backups', 'Instalar más barras', 'Compartir la clave'], correct: 1 },
+        { q: 'Una copia solo en el mismo disco:', options: ['Basta siempre', 'También puede cifrarse', 'Reemplaza al antivirus', 'Es 3-2-1'], correct: 1 }
+      ]
+    },
+    {
+      id: 'c16',
+      title: 'Redes sociales y doxxing',
+      description: 'Qué no publicar y cómo un perfil abierto alimenta ingeniería social.',
+      icon: '📱',
+      lessons: [
+        { title: 'Datos que se juntan', content: '<p>Colegio + mascota + fecha de cumple pueden adivinar preguntas secretas.</p>' },
+        { title: 'Ubicación en tiempo real', content: '<p>Historias con mapa pueden decir que no hay nadie en casa.</p>' }
+      ],
+      questions: [
+        { q: 'Publicar el ticket de avión completo:', options: ['No importa', 'Puede exponer código y datos de viaje', 'Mejora la seguridad', 'Es obligatorio'], correct: 1 },
+        { q: 'Preguntas de recuperación tipo “mascota”:', options: ['Conviene que estén en tu bio', 'No deberías publicarlas', 'Dan 2FA', 'Son irrelevantes'], correct: 1 }
+      ]
     }
   ];
 }
